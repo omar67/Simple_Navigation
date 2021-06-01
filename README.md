@@ -7,3 +7,4 @@ The main focus of this project is to practice on the following:
   - Fragments
   - Intents
   - ViewModels
+  - RecycleView
