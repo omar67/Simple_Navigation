@@ -20,9 +20,6 @@ class StoreFragment : Fragment() {
         val main = activity as MainActivity
         main.supportActionBar?.title = "Store"
 
-//        this.activity?.findViewById<Button>(R.id.storeBtn)?.isEnabled = false
-//        this.activity?.findViewById<Button>(R.id.helpBtn)?.isEnabled = true
-
     }
 
     @SuppressLint("WrongConstant")
@@ -53,12 +50,5 @@ class StoreFragment : Fragment() {
 
         return v
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        this.activity?.findViewById<Button>(R.id.storeBtn)?.isEnabled = false
-//        this.activity?.findViewById<Button>(R.id.helpBtn)?.isEnabled = true
-//        this.activity?.findViewById<Button>(R.id.optionsBtn)?.isEnabled = true
-//    }
 
 }

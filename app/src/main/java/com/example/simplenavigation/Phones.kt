@@ -3,8 +3,6 @@ package com.example.simplenavigation
 class Phones ( phones: MutableList<Phone>){
 
     val phones = phones
-        get() = field
-
 
     fun addPhone(phone: Phone){
         phones.add(phone)

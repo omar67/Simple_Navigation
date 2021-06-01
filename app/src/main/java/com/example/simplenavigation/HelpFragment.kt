@@ -23,15 +23,13 @@ class HelpFragment : Fragment() {
 
         val main = activity as MainActivity
         main.supportActionBar?.title = "Help"
-
-//        main.findViewById<Button>(R.id.storeBtn).isEnabled = true
-//        main.findViewById<Button>(R.id.helpBtn).isEnabled = false
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         val v =  inflater.inflate(R.layout.fragment_help, container, false)
         val returnBtn = v.findViewById<Button>(R.id.returnToStoreBtn)
         val viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
@@ -42,16 +40,10 @@ class HelpFragment : Fragment() {
             v.findNavController().navigate(R.id.action_helpFragment_to_storeFragment)
         }
 
-        // Inflate the layout for this fragment
+
         return v
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        this.activity?.findViewById<Button>(R.id.storeBtn)?.isEnabled = true
-//        this.activity?.findViewById<Button>(R.id.helpBtn)?.isEnabled = false
-//        this.activity?.findViewById<Button>(R.id.optionsBtn)?.isEnabled = true
-//    }
 
 
     }
