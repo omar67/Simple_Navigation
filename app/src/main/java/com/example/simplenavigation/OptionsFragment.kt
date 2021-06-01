@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.skydoves.colorpickerview.listeners.ColorListener
 
@@ -34,7 +36,7 @@ class OptionsFragment : Fragment() {
         val darkThemeBtn = v.findViewById<Button>(R.id.DarkThemeBtn)
         val lightThemeBtn = v.findViewById<Button>(R.id.LightThemeBtn)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        val viewModel: SharedViewModel by activityViewModels()
         val main = activity as MainActivity
         val actionBar = main.supportActionBar
         if (viewModel.themeColor != -1)

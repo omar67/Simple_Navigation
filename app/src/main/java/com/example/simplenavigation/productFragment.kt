@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 
 
@@ -24,8 +26,9 @@ class productFragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_product, container, false)
 
-        val currentPhone = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java).currentPhone
-        val themeColor = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java).themeColor
+        val viewModel: SharedViewModel by activityViewModels()
+        val currentPhone = viewModel.currentPhone
+        val themeColor  = viewModel.themeColor
 
         v.findViewById<TextView>(R.id.productTitle).text = currentPhone.model
         v.findViewById<ImageView>(R.id.productImage).setImageResource(currentPhone.image)

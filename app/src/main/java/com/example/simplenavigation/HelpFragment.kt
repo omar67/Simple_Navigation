@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -32,7 +34,7 @@ class HelpFragment : Fragment() {
         // Inflate the layout for this fragment
         val v =  inflater.inflate(R.layout.fragment_help, container, false)
         val returnBtn = v.findViewById<Button>(R.id.returnToStoreBtn)
-        val viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        val viewModel: SharedViewModel by activityViewModels()
         if (viewModel.themeColor != -1)
             returnBtn.setBackgroundColor(viewModel.themeColor)
 

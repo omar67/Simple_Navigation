@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +33,7 @@ class StoreFragment : Fragment() {
 
         val needHelpBtn = v.findViewById<Button>(R.id.needHelpBtn)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        val viewModel: SharedViewModel by activityViewModels()
         if (viewModel.themeColor != -1)
             needHelpBtn.setBackgroundColor(viewModel.themeColor)
 
