@@ -1,11 +1,22 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 }
+
+
+
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+
+    buildFeatures {
+//        viewBinding true
+        dataBinding true
+
+    }
 
 
     defaultConfig {

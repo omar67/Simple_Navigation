@@ -1,34 +1,38 @@
 package com.example.simplenavigation
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import com.example.simplenavigation.databinding.FragmentOptionsBinding
 import com.skydoves.colorpickerview.listeners.ColorListener
 
 
 class OptionsFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_options, container, false)
+        val binding: FragmentOptionsBinding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_options, container, false)
+        binding.lifecycleOwner = this
+        val viewModel: SharedViewModel by activityViewModels()
+        binding.themeColor = resources.getColor(R.color.purple_200)
+        val v = binding.root
+
         val colorPickerView =
             v.findViewById<com.skydoves.colorpickerview.ColorPickerView>(R.id.colorPickerView)
         val changeAccentColor = v.findViewById<Button>(R.id.accentThemeBtn)
@@ -36,49 +40,29 @@ class OptionsFragment : Fragment() {
         val darkThemeBtn = v.findViewById<Button>(R.id.DarkThemeBtn)
         val lightThemeBtn = v.findViewById<Button>(R.id.LightThemeBtn)
 
-        val viewModel: SharedViewModel by activityViewModels()
-        val main = activity as MainActivity
-        val actionBar = main.supportActionBar
-        if (viewModel.themeColor != -1)
-        {
-            changeAccentColor.setBackgroundColor(viewModel.themeColor)
-            defaultThemeBtn.setBackgroundColor(viewModel.themeColor)
-            darkThemeBtn.setBackgroundColor(viewModel.themeColor)
-            lightThemeBtn.setBackgroundColor(viewModel.themeColor)
-            activity?.window?.statusBarColor = viewModel.themeColor
-            activity?.window?.navigationBarColor = viewModel.themeColor
+        val sharedPref = activity?.getPreferences(MODE_PRIVATE) ?: return null
 
-
-            val colorDrawable = ColorDrawable(viewModel.themeColor)
-            actionBar?.setBackgroundDrawable(colorDrawable)
-
-        }
-        colorPickerView.setColorListener(ColorListener { color, fromUser ->
+        viewModel.themeColor.observe(this, Observer { color ->
             if (color != -1) {
-                viewModel.themeColor = color
-
-                changeAccentColor.setBackgroundColor(color)
-                defaultThemeBtn.setBackgroundColor(color)
-                darkThemeBtn.setBackgroundColor(color)
-                lightThemeBtn.setBackgroundColor(color)
-                activity?.window?.statusBarColor = color
-                activity?.window?.colorMode = color
-                activity?.window?.navigationBarColor = color
-
-                val colorDrawable = ColorDrawable(viewModel.themeColor)
-                actionBar?.setBackgroundDrawable(colorDrawable)
+                with(sharedPref.edit()) {
+                    putInt("color", color)
+                    Log.d("debugg", "Saved to Prefs: $color")
+                    apply()
+                }
+                binding.themeColor = color
             }
         })
 
-
-
-
+        colorPickerView.setColorListener(ColorListener { color, fromUser ->
+            if (color != -1) {
+                viewModel.themeColor.postValue(color)
+            }
+        })
 
         changeAccentColor.setOnClickListener {
             if (colorPickerView.visibility == View.VISIBLE) {
                 colorPickerView.visibility = View.INVISIBLE
                 changeAccentColor.text = "Change Accent Color"
-                Toast.makeText(v.context, "Your theme has been saved", Toast.LENGTH_SHORT).show()
             } else {
                 colorPickerView.visibility = View.VISIBLE
                 changeAccentColor.text = "Save Accent Color"
@@ -89,15 +73,15 @@ class OptionsFragment : Fragment() {
         updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
 
         defaultThemeBtn.setOnClickListener {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, sharedPref)
             updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
         }
         darkThemeBtn.setOnClickListener {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_YES, sharedPref)
             updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
         }
         lightThemeBtn.setOnClickListener {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_NO, sharedPref)
             updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
         }
 
@@ -105,13 +89,21 @@ class OptionsFragment : Fragment() {
         return v
     }
 
+    private fun updateAndSaveMode(mode: Int, sharedPref: SharedPreferences) {
+        AppCompatDelegate.setDefaultNightMode(mode)
+        with(sharedPref.edit()) {
+            putInt("mode", mode)
+            Log.d("debugg", "Saved to Prefs: $mode")
+            apply()
+        }
+    }
+
     private fun updateButtonStatus(
         defaultThemeBtn: Button,
         darkThemeBtn: Button,
-        lightThemeBtn: Button
+        lightThemeBtn: Button,
     ) {
-        val currentNightMode = AppCompatDelegate.getDefaultNightMode()
-        when (currentNightMode) {
+        when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_YES -> {
                 defaultThemeBtn.isEnabled = true
                 darkThemeBtn.isEnabled = false

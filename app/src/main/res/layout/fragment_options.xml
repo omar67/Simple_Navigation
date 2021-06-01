@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="themeColor"
+            type="int"
+
+            />
+    </data>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/consLayout"
     android:layout_width="match_parent"
@@ -36,7 +50,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/DarkThemeBtn"
-        app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn" />
+        app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
+        android:backgroundTint="@{themeColor}"/>
 
     <Button
         android:id="@+id/DarkThemeBtn"
@@ -49,7 +64,9 @@
         app:layout_constraintEnd_toStartOf="@+id/LightThemeBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/defaultThemeBtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        android:backgroundTint="@{themeColor}"
+        />
 
     <Button
         android:id="@+id/defaultThemeBtn"
@@ -60,7 +77,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn" />
+        app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
+        android:backgroundTint="@{themeColor}"/>
 
     <Button
         android:id="@+id/accentThemeBtn"
@@ -71,7 +89,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DarkThemeBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/DarkThemeBtn"
+        android:backgroundTint="@{themeColor}"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

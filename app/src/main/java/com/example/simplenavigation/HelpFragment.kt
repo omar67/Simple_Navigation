@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -35,8 +36,10 @@ class HelpFragment : Fragment() {
         val v =  inflater.inflate(R.layout.fragment_help, container, false)
         val returnBtn = v.findViewById<Button>(R.id.returnToStoreBtn)
         val viewModel: SharedViewModel by activityViewModels()
-        if (viewModel.themeColor != -1)
-            returnBtn.setBackgroundColor(viewModel.themeColor)
+        viewModel.themeColor.observe(this, Observer { color ->
+            if(color != -1)
+            returnBtn.setBackgroundColor(color)
+        })
 
         returnBtn.setOnClickListener {
             v.findNavController().navigate(R.id.action_helpFragment_to_storeFragment)

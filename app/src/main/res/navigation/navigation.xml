@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/storeFragment"
         android:name="com.example.simplenavigation.StoreFragment"
-        android:label="fragment_store"
-        tools:layout="@layout/fragment_store" >
+        android:label="Store"
+        tools:layout="@layout/fragment_store">
         <action
             android:id="@+id/action_storeFragment_to_helpFragment"
             app:destination="@id/helpFragment"
@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.example.simplenavigation.HelpFragment"
-        android:label="fragment_help"
+        android:label="Help"
         tools:layout="@layout/fragment_help">
         <action
             android:id="@+id/action_helpFragment_to_storeFragment"
@@ -43,11 +43,11 @@
     <fragment
         android:id="@+id/optionsFragments"
         android:name="com.example.simplenavigation.OptionsFragment"
-        android:label="fragment_options"
+        android:label="Options"
         tools:layout="@layout/fragment_options" />
     <fragment
         android:id="@+id/productFragment"
         android:name="com.example.simplenavigation.productFragment"
-        android:label="fragment_product"
+        android:label="Product"
         tools:layout="@layout/fragment_product" />
 </navigation>

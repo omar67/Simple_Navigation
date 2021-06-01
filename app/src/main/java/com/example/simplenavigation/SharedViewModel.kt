@@ -1,7 +1,12 @@
 package com.example.simplenavigation
 
-import android.graphics.Color
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+
 
 class SharedViewModel : ViewModel() {
 
@@ -31,9 +36,6 @@ class SharedViewModel : ViewModel() {
 
     var phones = Phones(list)
     var currentPhone: Phone = phones.phones[0]
-    var themeColor: Int = -1
-
-
-
+    var themeColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
 
 }
