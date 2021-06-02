@@ -31,14 +31,13 @@ class OptionsFragment : Fragment() {
         binding.lifecycleOwner = this
         val viewModel: SharedViewModel by activityViewModels()
         binding.themeColor = resources.getColor(R.color.purple_200)
-        val v = binding.root
 
-        val colorPickerView =
-            v.findViewById<com.skydoves.colorpickerview.ColorPickerView>(R.id.colorPickerView)
-        val changeAccentColor = v.findViewById<Button>(R.id.accentThemeBtn)
-        val defaultThemeBtn = v.findViewById<Button>(R.id.defaultThemeBtn)
-        val darkThemeBtn = v.findViewById<Button>(R.id.DarkThemeBtn)
-        val lightThemeBtn = v.findViewById<Button>(R.id.LightThemeBtn)
+
+        val colorPickerView = binding.colorPickerView
+        val changeAccentColor = binding.accentThemeBtn
+        val defaultThemeBtn = binding.defaultThemeBtn
+        val darkThemeBtn = binding.DarkThemeBtn
+        val lightThemeBtn = binding.LightThemeBtn
 
         val sharedPref = activity?.getPreferences(MODE_PRIVATE) ?: return null
 
@@ -86,7 +85,7 @@ class OptionsFragment : Fragment() {
         }
 
 
-        return v
+        return binding.root
     }
 
     private fun updateAndSaveMode(mode: Int, sharedPref: SharedPreferences) {
