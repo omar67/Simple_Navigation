@@ -1,14 +1,9 @@
 package com.example.simplenavigation
 
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,88 +15,71 @@ import com.skydoves.colorpickerview.listeners.ColorListener
 
 class OptionsFragment : Fragment() {
 
+    private lateinit var binding: FragmentOptionsBinding
+    private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val binding: FragmentOptionsBinding =
+        binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_options, container, false)
         binding.lifecycleOwner = this
-        val viewModel: SharedViewModel by activityViewModels()
-        binding.themeColor = resources.getColor(R.color.purple_200)
+        binding.optionsFragment = this
 
+//        theme color observer. also it will get called when the fragment start (visible to user)
+        viewModel.themeColor.observe(this.viewLifecycleOwner, Observer { color ->
+            if (color != -1)
+                binding.btnColor = color
+        })
 
+        // color wheel listener, listens for any change in the color
+        binding.colorPickerView.setColorListener(ColorListener { color, fromUser ->
+            if (color != -1 && color != viewModel.themeColor.value)
+                viewModel.saveThemeColor(color)
+        })
+
+//        update the fragment view for preferred theme
+        updateButtonState()
+        return binding.root
+    }
+
+    //    this method will change the state of changeAccent button
+    fun changeAccentColor() {
         val colorPickerView = binding.colorPickerView
-        val changeAccentColor = binding.accentThemeBtn
+        val changeAccentColorBtn = binding.accentThemeBtn
+
+        if (colorPickerView.visibility == View.VISIBLE) {
+            colorPickerView.visibility = View.INVISIBLE
+            changeAccentColorBtn.text = "Change Accent Color"
+        } else {
+            colorPickerView.visibility = View.VISIBLE
+            changeAccentColorBtn.text = "Save Accent Color"
+        }
+    }
+
+    //    this method gets called when Light,Dark,Default buttons gets clicked
+    fun changeDisplayMode(btn: String) {
+        when (btn) {
+            "Light" -> updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "Dark" -> updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "Default" -> updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
+        updateButtonState()
+    }
+
+    // this method will save the current mode and main activity will observer changes and update
+    private fun updateAndSaveMode(mode: Int) {
+        viewModel.saveThemeMode(mode)
+    }
+
+    //    this method is just to update buttons state
+    private fun updateButtonState() {
         val defaultThemeBtn = binding.defaultThemeBtn
         val darkThemeBtn = binding.DarkThemeBtn
         val lightThemeBtn = binding.LightThemeBtn
 
-        val sharedPref = activity?.getPreferences(MODE_PRIVATE) ?: return null
-
-        viewModel.themeColor.observe(this, Observer { color ->
-            if (color != -1) {
-                with(sharedPref.edit()) {
-                    putInt("color", color)
-                    Log.d("debugg", "Saved to Prefs: $color")
-                    apply()
-                }
-                binding.themeColor = color
-            }
-        })
-
-        colorPickerView.setColorListener(ColorListener { color, fromUser ->
-            if (color != -1) {
-                viewModel.themeColor.postValue(color)
-            }
-        })
-
-        changeAccentColor.setOnClickListener {
-            if (colorPickerView.visibility == View.VISIBLE) {
-                colorPickerView.visibility = View.INVISIBLE
-                changeAccentColor.text = "Change Accent Color"
-            } else {
-                colorPickerView.visibility = View.VISIBLE
-                changeAccentColor.text = "Save Accent Color"
-            }
-        }
-
-
-        updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
-
-        defaultThemeBtn.setOnClickListener {
-            updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, sharedPref)
-            updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
-        }
-        darkThemeBtn.setOnClickListener {
-            updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_YES, sharedPref)
-            updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
-        }
-        lightThemeBtn.setOnClickListener {
-            updateAndSaveMode(AppCompatDelegate.MODE_NIGHT_NO, sharedPref)
-            updateButtonStatus(defaultThemeBtn, darkThemeBtn, lightThemeBtn)
-        }
-
-
-        return binding.root
-    }
-
-    private fun updateAndSaveMode(mode: Int, sharedPref: SharedPreferences) {
-        AppCompatDelegate.setDefaultNightMode(mode)
-        with(sharedPref.edit()) {
-            putInt("mode", mode)
-            Log.d("debugg", "Saved to Prefs: $mode")
-            apply()
-        }
-    }
-
-    private fun updateButtonStatus(
-        defaultThemeBtn: Button,
-        darkThemeBtn: Button,
-        lightThemeBtn: Button,
-    ) {
         when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_YES -> {
                 defaultThemeBtn.isEnabled = true

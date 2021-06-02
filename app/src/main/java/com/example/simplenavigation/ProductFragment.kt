@@ -9,16 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.example.simplenavigation.databinding.ActivityMainBinding
 
 
-class productFragment : Fragment() {
-
-
+class ProductFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,12 +25,12 @@ class productFragment : Fragment() {
 
         val viewModel: SharedViewModel by activityViewModels()
         val currentPhone = viewModel.currentPhone
-        val themeColor  = viewModel.themeColor
-        val detailsBtn =v.findViewById<Button>(R.id.detailsBtn)
+        val themeColor = viewModel.themeColor
+        val detailsBtn = v.findViewById<Button>(R.id.detailsBtn)
 
         themeColor.observe(this, Observer { color ->
-            if(color != -1)
-            detailsBtn.setBackgroundColor(color)
+            if (color != -1)
+                detailsBtn.setBackgroundColor(color)
         })
 
         v.findViewById<TextView>(R.id.productTitle).text = currentPhone.model

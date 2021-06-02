@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_options" />
     <fragment
         android:id="@+id/productFragment"
-        android:name="com.example.simplenavigation.productFragment"
+        android:name="com.example.simplenavigation.ProductFragment"
         android:label="Product"
         tools:layout="@layout/fragment_product" />
 </navigation>

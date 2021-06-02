@@ -3,13 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
+    <data >
         <variable
-            name="themeColor"
+            name="btnColor"
             type="int"
-
             />
+        <variable
+            name="optionsFragment"
+            type="com.example.simplenavigation.OptionsFragment" />
     </data>
 
 
@@ -30,7 +31,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.378"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accentThemeBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/accentThemeBtn"
+        />
+
 
     <TextView
         android:id="@+id/textView5"
@@ -51,7 +54,10 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/DarkThemeBtn"
         app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{themeColor}"/>
+        android:backgroundTint="@{btnColor}"
+        android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Light")}'
+
+        />
 
     <Button
         android:id="@+id/DarkThemeBtn"
@@ -65,7 +71,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/defaultThemeBtn"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
-        android:backgroundTint="@{themeColor}"
+        android:backgroundTint="@{btnColor}"
+        android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Dark")}'
         />
 
     <Button
@@ -78,7 +85,9 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{themeColor}"/>
+        android:backgroundTint="@{btnColor}"
+        android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Default")}'
+        />
 
     <Button
         android:id="@+id/accentThemeBtn"
@@ -90,7 +99,9 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{themeColor}"/>
+        android:backgroundTint="@{btnColor}"
+        android:onClick="@{() -> optionsFragment.changeAccentColor() }"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
