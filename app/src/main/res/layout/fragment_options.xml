@@ -5,12 +5,11 @@
 
     <data >
         <variable
-            name="btnColor"
-            type="int"
-            />
-        <variable
             name="optionsFragment"
             type="com.example.simplenavigation.OptionsFragment" />
+        <variable
+            name="viewModel"
+            type="com.example.simplenavigation.SharedViewModel" />
     </data>
 
 
@@ -50,11 +49,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Light"
+        android:textColor="@{viewModel.textColor}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/DarkThemeBtn"
         app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{btnColor}"
+        android:backgroundTint="@{viewModel.themeColor}"
         android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Light")}'
 
         />
@@ -67,11 +67,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Dark"
+        android:textColor="@{viewModel.textColor}"
         app:layout_constraintEnd_toStartOf="@+id/LightThemeBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/defaultThemeBtn"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
-        android:backgroundTint="@{btnColor}"
+        android:backgroundTint="@{viewModel.themeColor}"
         android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Dark")}'
         />
 
@@ -80,12 +81,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Default"
+        android:textColor="@{viewModel.textColor}"
         app:layout_constraintEnd_toStartOf="@+id/DarkThemeBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{btnColor}"
+        android:backgroundTint="@{viewModel.themeColor}"
         android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Default")}'
         />
 
@@ -95,11 +97,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Change Accent Color"
+        android:textColor="@{viewModel.textColor}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{btnColor}"
+        android:backgroundTint="@{viewModel.themeColor}"
         android:onClick="@{() -> optionsFragment.changeAccentColor() }"
         />
 

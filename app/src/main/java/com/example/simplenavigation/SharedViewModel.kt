@@ -2,6 +2,7 @@ package com.example.simplenavigation
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
+import android.graphics.Color
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -35,8 +36,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     private val sharedPref = application.getSharedPreferences("theme", MODE_PRIVATE)
     var phones = Phones(list)
     var currentPhone: Phone = phones.phones[0]
-    var themeColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
-    var themeMode: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+    val themeColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+
+    val themeMode: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+    val textColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
 
     init {
         val defaultColor = application.resources.getColor(R.color.purple_200)
@@ -49,11 +52,19 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     // save the theme color to shared preferences
     fun saveThemeColor(color: Int) {
         themeColor.value = color
+        updateTextColor(color)
         with(sharedPref.edit()) {
             putInt("color", color)
             Log.d("debugg", "Saved theme color to Prefs: $color")
             apply()
         }
+    }
+
+    private fun updateTextColor(color: Int) {
+        if(isColorDark(color))
+            textColor.value = Color.WHITE
+        else
+            textColor.value = Color.BLACK
     }
 
     // save the theme display mode to shared preferences
@@ -66,6 +77,11 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
                 apply()
             }
         }
+    }
+    private fun isColorDark(color: Int): Boolean {
+        val darkness: Double =
+            1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
+        return darkness >= 0.5
     }
 
 

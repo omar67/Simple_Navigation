@@ -1,10 +1,12 @@
 package com.example.simplenavigation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,20 +27,18 @@ class OptionsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_options, container, false)
-        binding.lifecycleOwner = this
-        binding.optionsFragment = this
 
-//        theme color observer. also it will get called when the fragment start (visible to user)
-        viewModel.themeColor.observe(this.viewLifecycleOwner, Observer { color ->
-            if (color != -1)
-                binding.btnColor = color
-        })
+        binding.optionsFragment = this
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         // color wheel listener, listens for any change in the color
         binding.colorPickerView.setColorListener(ColorListener { color, fromUser ->
             if (color != -1 && color != viewModel.themeColor.value)
                 viewModel.saveThemeColor(color)
+                updateButtonState()
         })
+
 
 //        update the fragment view for preferred theme
         updateButtonState()
@@ -83,18 +83,27 @@ class OptionsFragment : Fragment() {
         when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_YES -> {
                 defaultThemeBtn.isEnabled = true
+                defaultThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 darkThemeBtn.isEnabled = false
+                darkThemeBtn.setBackgroundColor(ColorUtils.blendARGB(viewModel.themeColor.value!!, Color.BLACK, 0.4f))
                 lightThemeBtn.isEnabled = true
+                lightThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
             } // Night mode is active, we're using dark theme
             AppCompatDelegate.MODE_NIGHT_NO -> {
                 defaultThemeBtn.isEnabled = true
+                defaultThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 darkThemeBtn.isEnabled = true
+                darkThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 lightThemeBtn.isEnabled = false
+                lightThemeBtn.setBackgroundColor(ColorUtils.blendARGB(viewModel.themeColor.value!!, Color.BLACK, 0.4f))
             } // Night mode is not active, we're using the light theme
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
                 defaultThemeBtn.isEnabled = false
+                defaultThemeBtn.setBackgroundColor(ColorUtils.blendARGB(viewModel.themeColor.value!!, Color.BLACK, 0.4f))
                 darkThemeBtn.isEnabled = true
+                darkThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 lightThemeBtn.isEnabled = true
+                lightThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
             } // Night mode is set to default
         }
 

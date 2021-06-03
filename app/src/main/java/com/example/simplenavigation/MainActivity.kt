@@ -2,6 +2,9 @@ package com.example.simplenavigation
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,6 +19,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.simplenavigation.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
@@ -28,15 +32,30 @@ class MainActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
 
         val viewModel: SharedViewModel by viewModels()
+        binding.lifecycleOwner = this
+
 //        observe theme color and update action bar and status bar and navigation bar
         viewModel.themeColor.observe(this, Observer { color ->
             if (color != -1) {
                 this.window?.statusBarColor = color
                 this.window?.navigationBarColor = color
-                val colorDrawable = ColorDrawable(color)
-                this.supportActionBar?.setBackgroundDrawable(colorDrawable)
+//                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                    val colorDrawable = ColorDrawable(color)
+                    this.supportActionBar?.setBackgroundDrawable(colorDrawable)
+//                }
             }
         })
+        //        observe theme text color and update action bar title
+//        viewModel.textColor.observe(this, Observer { color ->
+//            val text: Spannable = SpannableString(supportActionBar?.title)
+//            text.setSpan(
+//                ForegroundColorSpan(color),
+//                0,
+//                text.length,
+//                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+//            )
+//            supportActionBar!!.title = text
+//        })
 
 //        observe and update display mode
         viewModel.themeMode.observe(this, Observer { mode ->
