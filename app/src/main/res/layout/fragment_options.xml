@@ -54,7 +54,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/DarkThemeBtn"
         app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{viewModel.themeColor}"
+        android:backgroundTint="@{viewModel.getSelectedThemeBtn(`light`)}"
         android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Light")}'
 
         />
@@ -72,7 +72,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/defaultThemeBtn"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
-        android:backgroundTint="@{viewModel.themeColor}"
+        android:backgroundTint="@{viewModel.getSelectedThemeBtn(`dark`)}"
         android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Dark")}'
         />
 
@@ -87,7 +87,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/DarkThemeBtn"
-        android:backgroundTint="@{viewModel.themeColor}"
+        android:backgroundTint="@{viewModel.getSelectedThemeBtn(`default`)}"
         android:onClick='@{ () ->  optionsFragment.changeDisplayMode("Default")}'
         />
 

@@ -36,7 +36,6 @@ class OptionsFragment : Fragment() {
         binding.colorPickerView.setColorListener(ColorListener { color, fromUser ->
             if (color != -1 && color != viewModel.themeColor.value)
                 viewModel.saveThemeColor(color)
-                updateButtonState()
         })
 
 
@@ -83,27 +82,18 @@ class OptionsFragment : Fragment() {
         when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_YES -> {
                 defaultThemeBtn.isEnabled = true
-                defaultThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 darkThemeBtn.isEnabled = false
-                darkThemeBtn.setBackgroundColor(ColorUtils.blendARGB(viewModel.themeColor.value!!, Color.BLACK, 0.4f))
                 lightThemeBtn.isEnabled = true
-                lightThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
             } // Night mode is active, we're using dark theme
             AppCompatDelegate.MODE_NIGHT_NO -> {
                 defaultThemeBtn.isEnabled = true
-                defaultThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 darkThemeBtn.isEnabled = true
-                darkThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 lightThemeBtn.isEnabled = false
-                lightThemeBtn.setBackgroundColor(ColorUtils.blendARGB(viewModel.themeColor.value!!, Color.BLACK, 0.4f))
             } // Night mode is not active, we're using the light theme
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
                 defaultThemeBtn.isEnabled = false
-                defaultThemeBtn.setBackgroundColor(ColorUtils.blendARGB(viewModel.themeColor.value!!, Color.BLACK, 0.4f))
                 darkThemeBtn.isEnabled = true
-                darkThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
                 lightThemeBtn.isEnabled = true
-                lightThemeBtn.setBackgroundColor(viewModel.themeColor.value!!)
             } // Night mode is set to default
         }
 

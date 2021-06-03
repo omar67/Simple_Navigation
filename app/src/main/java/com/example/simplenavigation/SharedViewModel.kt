@@ -4,8 +4,12 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
@@ -47,6 +51,24 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         themeMode.value = sharedPref.getInt("mode", -1)
         Log.d("debugg", "restore theme color:  ${themeColor.value}")
         Log.d("debugg", "restore theme mode:  ${themeMode.value}")
+    }
+
+    fun getSelectedThemeBtn(mode: String): LiveData<Int> {
+        val disabledColor = Transformations.map(themeColor) {
+                color -> ColorUtils.blendARGB(themeColor.value!!, Color.BLACK, 0.4f)
+        }
+
+        if(themeMode.value == AppCompatDelegate.MODE_NIGHT_YES && mode == "dark")
+            return disabledColor
+
+        else if(themeMode.value == AppCompatDelegate.MODE_NIGHT_NO && mode == "light")
+            return disabledColor
+
+        else if(themeMode.value == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM && mode == "default")
+            return disabledColor
+
+        else
+            return themeColor
     }
 
     // save the theme color to shared preferences
