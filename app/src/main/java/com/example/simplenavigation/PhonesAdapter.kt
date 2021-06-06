@@ -24,13 +24,11 @@ class PhonesAdapter(
 
         context = parent.context
 
-
         return ViewHolder(v)
     }
-
+//      bind data on the recycler view (only one card)
     override fun onBindViewHolder(holder: PhonesAdapter.ViewHolder, position: Int) {
 
-//        holder.productListView.setImageResource(dataSet[position].image)
         if (dataSet[position].image.isEmpty())
             return
         try {
@@ -47,12 +45,11 @@ class PhonesAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var productListView: ImageView
+        var productListView: ImageView = itemView.findViewById(R.id.productListView)
 
         init {
-            productListView = itemView.findViewById(R.id.productListView)
             itemView.setOnClickListener {
-                viewModel.currentPhone = dataSet[position]
+                viewModel.selectPhone(dataSet[position])
                 itemView.findNavController().navigate(R.id.action_storeFragment_to_productFragment)
 
             }

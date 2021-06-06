@@ -6,53 +6,25 @@ import android.graphics.Color
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.graphics.ColorUtils
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val list = mutableListOf<Phone>(
-        Phone(
-            "Samsung",
-            "A52",
-            "https://shop.mobily.com.sa/wp-content/uploads/2019/08/Huawei-5G.png",
-            "Samsung A52 phone: 64GB",
-            "https://www.mobily.com.sa/wps/portal/web/personal/mobile/phones-and-accessories/details/samsung-a52/"
-        ),
-        Phone(
-            "Apple",
-            "iPhone 12 mini",
-            "https://shop.mobily.com.sa/wp-content/uploads/2019/08/Huawei-5G.png",
-            "Iphone 12 mini phone: 128GB",
-            "https://www.mobily.com.sa/wps/portal/web/personal/mobile/phones-and-accessories/details/iphone12-mini/"
-        ),
-        Phone(
-            "Apple",
-            "iPhone 12 Pro Max",
-            "https://shop.mobily.com.sa/wp-content/uploads/2019/08/Huawei-5G.png",
-            "Iphone 12 Pro Max phone: 254GB",
-            "https://www.mobily.com.sa/wps/portal/web/personal/mobile/phones-and-accessories/details/iphone-12-pro-max/"
-        )
-    )
 
     private val sharedPref = application.getSharedPreferences("theme", MODE_PRIVATE)
 
     //    var phones: MutableLiveData<Phones> =  MutableLiveData(Phones(list))
-    var phones: MutableLiveData<Phones> = MutableLiveData()
+    var phones: MutableLiveData<MutableList<Phone>> = MutableLiveData()
     lateinit var currentPhone: Phone
     val themeColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
 
     val themeMode: MutableLiveData<Int> = MutableLiveData<Int>(-1)
     val textColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
 
+//    is loading from fetching data from MobilyAPI
     val isLoading = MutableLiveData(true)
+
 
     init {
         val defaultColor = application.resources.getColor(R.color.purple_200)
@@ -63,19 +35,17 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         retrievePhones()
     }
 
+//    return a grayed out color if the button is selected
     fun getSelectedThemeBtn(mode: String): LiveData<Int> {
-        val disabledColor = Transformations.map(themeColor) { color ->
+        val disabledColor = Transformations.map(themeColor) {
             ColorUtils.blendARGB(themeColor.value!!, Color.BLACK, 0.4f)
         }
-
-        if (themeMode.value == AppCompatDelegate.MODE_NIGHT_YES && mode == "dark")
-            return disabledColor
-        else if (themeMode.value == AppCompatDelegate.MODE_NIGHT_NO && mode == "light")
-            return disabledColor
-        else if (themeMode.value == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM && mode == "default")
-            return disabledColor
-        else
-            return themeColor
+        return when {
+            themeMode.value == AppCompatDelegate.MODE_NIGHT_YES && mode == "dark" -> disabledColor
+            themeMode.value == AppCompatDelegate.MODE_NIGHT_NO && mode == "light" -> disabledColor
+            themeMode.value == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM && mode == "default" -> disabledColor
+            else -> themeColor
+        }
     }
 
     // save the theme color to shared preferences
@@ -89,6 +59,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    //    update the UI text style color
     private fun updateTextColor(color: Int) {
         if (isColorDark(color))
             textColor.value = Color.WHITE
@@ -108,19 +79,24 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    // return true if the selected color is dark as the name describe!
     private fun isColorDark(color: Int): Boolean {
         val darkness: Double =
             1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
         return darkness >= 0.5
     }
 
+    //    retrieve the phones from the MobilyAPI
     private fun retrievePhones() {
-        GlobalScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             isLoading.postValue(true)
-            val res = MobilyAPI.fetchPhones()
-            phones.postValue(res)
+            phones.postValue(MobilyAPI.fetchPhones())
             isLoading.postValue(false)
         }
+    }
+
+    fun selectPhone(phone: Phone) {
+        currentPhone = phone
     }
 
 

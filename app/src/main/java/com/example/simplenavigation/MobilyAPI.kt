@@ -5,34 +5,40 @@ import org.jsoup.Jsoup
 class MobilyAPI {
 
     companion object {
-        fun fetchPhones(): Phones {
+        /*
+            This method is all about fetching the phones from Mobily site, Jsoup used here to extract the information
+            from a selected website based on DOM element of the website (Web Scraping)
+         */
+        fun fetchPhones(): MutableList<Phone> {
             val phonesList = mutableListOf<Phone>()
+
             for (i in 1..5) {
                 var url = "https://shop.mobily.com.sa/product-category/smartphones/?lang=en"
                 if (i > 1)
                     url = "https://shop.mobily.com.sa/product-category/smartphones/page/$i/?lang=en"
 
                 val doc = Jsoup.connect(url).get()
-                val phoneList = doc.getElementsByClass("product-h")
+                val domElements = doc.getElementsByClass("product-h")
 
-                phoneList.forEach { element ->
-                    var brand = ""
-                    var description = ""
+                domElements.forEach { element ->
+                    val data = element.children()[0]
+
                     val model =
-                        element.children()[0].getElementsByClass("product-meta")[0].children()[0].text()
-                    val phoneUrl = element.children()[0].attr("href")
-                    val phoneImg = element.children()[0].children()[0].attr("src")
-                    brand = getBrandName(model)
-                    description = "$brand, $model Phone"
+                        data.getElementsByClass("product-meta")[0].children()[0].text()
+                    val phoneUrl = data.attr("href")
+                    val phoneImg = data.children()[0].attr("src")
+
+                    val brand = getBrandName(model)
+                    val description = "$brand, $model Phone"
 
                     phonesList.add(Phone(brand, model, phoneImg, description, phoneUrl))
                 }
             }
-
-            return Phones(phonesList)
+            return phonesList
         }
 
 
+        //  return the brand name based on the model name
         private fun getBrandName(model: String): String {
             var brand = "null"
             when {

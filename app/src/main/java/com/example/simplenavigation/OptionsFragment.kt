@@ -30,7 +30,7 @@ class OptionsFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // color wheel listener, listens for any change in the color
-        binding.colorPickerView.setColorListener(ColorListener { color, fromUser ->
+        binding.colorPickerView.setColorListener(ColorListener { color, _ ->
             if (color != -1 && color != viewModel.themeColor.value)
                 viewModel.saveThemeColor(color)
         })

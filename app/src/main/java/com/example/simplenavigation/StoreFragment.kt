@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,7 @@ class StoreFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(
                 layoutInflater,
@@ -37,29 +36,26 @@ class StoreFragment : Fragment() {
         binding.storeFragment = this
         binding.lifecycleOwner = this
 
-        binding.progressBar.visibility = View.VISIBLE
 
-        var layoutManager: RecyclerView.LayoutManager? = null
-        var adapter: RecyclerView.Adapter<PhonesAdapter.ViewHolder>? = null
+        val layoutManager: RecyclerView.LayoutManager?
+        var adapter: RecyclerView.Adapter<PhonesAdapter.ViewHolder>?
 
         layoutManager = LinearLayoutManager(this.context, LinearLayout.HORIZONTAL, false)
         binding.productsRV.layoutManager = layoutManager
 
-//        display the loading progress bar on Store Fragment if needed
-        viewModel.isLoading.observe(this, Observer {
+//        display and update the loading progress bar on Store Fragment if needed
+        viewModel.isLoading.observe(this, {
             if (it)
                 binding.progressBar.visibility = View.VISIBLE
             else
                 binding.progressBar.visibility = View.GONE
         })
-//        display the phones when loaded
-        viewModel.phones.observe(this, Observer {
-            if (viewModel.phones != null) {
-                adapter = PhonesAdapter(viewModel.phones.value!!.phones, viewModel)
-                binding.productsRV.adapter = adapter
-                Log.d("debugg", "loaded")
-            } else
-                Log.d("debugg", "not loaded")
+
+//        display and update the phones when loaded
+        viewModel.phones.observe(this, {
+            adapter = PhonesAdapter(viewModel.phones.value!!, viewModel)
+            binding.productsRV.adapter = adapter
+            Log.d("debugg", "loaded")
         })
 
         return binding.root

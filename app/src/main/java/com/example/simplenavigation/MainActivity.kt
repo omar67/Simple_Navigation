@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -31,29 +30,30 @@ class MainActivity : AppCompatActivity() {
 
 
 //        observe theme color and update action bar and status bar and navigation bar
-        viewModel.themeColor.observe(this, Observer { color ->
+        viewModel.themeColor.observe(this, { color ->
             if (color != -1) {
                 this.window?.statusBarColor = color
                 this.window?.navigationBarColor = color
-//                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+
+//                update action bar color
                 val colorDrawable = ColorDrawable(color)
                 this.supportActionBar?.setBackgroundDrawable(colorDrawable)
-//                }
             }
         })
 
 
-
 //        observe and update display mode
-        viewModel.themeMode.observe(this, Observer { mode ->
+        viewModel.themeMode.observe(this, { mode ->
             AppCompatDelegate.setDefaultNightMode(mode)
         })
+
 
         navController = this.findNavController(R.id.fragmentContainerView)
         setupActionBarWithNavController(navController)
 
     }
 
+    //    handle overflow menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return NavigationUI.onNavDestinationSelected(
             item,
