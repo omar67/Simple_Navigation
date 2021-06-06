@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.simplenavigation.databinding.FragmentProductBinding
+import com.squareup.picasso.Picasso
 
 
 class ProductFragment : Fragment() {
@@ -35,7 +36,9 @@ class ProductFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.productImage.setImageResource(viewModel.currentPhone.image)
+        Picasso.with(this.context)
+            .load(viewModel.currentPhone.image)
+            .into(binding.productImage)
 
         binding.detailsBtn.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(currentPhone.url))

@@ -2,12 +2,8 @@ package com.example.simplenavigation
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -29,10 +25,10 @@ class MainActivity : AppCompatActivity() {
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        binding.progressBar.visibility = View.VISIBLE
 
         val viewModel: SharedViewModel by viewModels()
         binding.lifecycleOwner = this
+
 
 //        observe theme color and update action bar and status bar and navigation bar
         viewModel.themeColor.observe(this, Observer { color ->
@@ -40,22 +36,13 @@ class MainActivity : AppCompatActivity() {
                 this.window?.statusBarColor = color
                 this.window?.navigationBarColor = color
 //                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
-                    val colorDrawable = ColorDrawable(color)
-                    this.supportActionBar?.setBackgroundDrawable(colorDrawable)
+                val colorDrawable = ColorDrawable(color)
+                this.supportActionBar?.setBackgroundDrawable(colorDrawable)
 //                }
             }
         })
-        //        observe theme text color and update action bar title
-//        viewModel.textColor.observe(this, Observer { color ->
-//            val text: Spannable = SpannableString(supportActionBar?.title)
-//            text.setSpan(
-//                ForegroundColorSpan(color),
-//                0,
-//                text.length,
-//                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-//            )
-//            supportActionBar!!.title = text
-//        })
+
+
 
 //        observe and update display mode
         viewModel.themeMode.observe(this, Observer { mode ->
@@ -65,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         navController = this.findNavController(R.id.fragmentContainerView)
         setupActionBarWithNavController(navController)
 
-        binding.progressBar.visibility = View.GONE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

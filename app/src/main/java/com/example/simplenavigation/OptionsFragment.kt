@@ -1,16 +1,13 @@
 package com.example.simplenavigation
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.example.simplenavigation.databinding.FragmentOptionsBinding
 import com.skydoves.colorpickerview.listeners.ColorListener
 
