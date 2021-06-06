@@ -93,6 +93,8 @@ class OptionsFragment : Fragment() {
                 lightThemeBtn.isEnabled = true
             } // Night mode is set to default
         }
+//        update the UI view model after each press -> this to fix Dark-Default mode bug
+        binding.viewModel = viewModel
 
 
     }
