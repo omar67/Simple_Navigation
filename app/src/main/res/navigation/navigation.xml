@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/storeFragment"
         android:name="com.example.simplenavigation.StoreFragment"
-        android:label="Store"
+        android:label="@string/store_title"
         tools:layout="@layout/fragment_store">
         <action
             android:id="@+id/action_storeFragment_to_helpFragment"
@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.example.simplenavigation.HelpFragment"
-        android:label="Help"
+        android:label="@string/help_title"
         tools:layout="@layout/fragment_help">
         <action
             android:id="@+id/action_helpFragment_to_storeFragment"
@@ -44,7 +44,7 @@
     <fragment
         android:id="@+id/optionsFragments"
         android:name="com.example.simplenavigation.OptionsFragment"
-        android:label="Options"
+        android:label="@string/options_title"
         tools:layout="@layout/fragment_options" />
     <fragment
         android:id="@+id/productFragment"

@@ -1,6 +1,9 @@
 package com.example.simplenavigation
 
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +11,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.simplenavigation.databinding.FragmentOptionsBinding
 import com.skydoves.colorpickerview.listeners.ColorListener
+import java.util.*
 
 
 class OptionsFragment : Fragment() {
@@ -48,10 +53,12 @@ class OptionsFragment : Fragment() {
 
         if (colorPickerView.visibility == View.VISIBLE) {
             colorPickerView.visibility = View.INVISIBLE
-            changeAccentColorBtn.text = "Change Accent Color"
+            changeAccentColorBtn.text = resources.getString(R.string.change_accent_button)
+
         } else {
             colorPickerView.visibility = View.VISIBLE
-            changeAccentColorBtn.text = "Save Accent Color"
+            changeAccentColorBtn.text = resources.getString(R.string.save_accent_button)
+
         }
     }
 

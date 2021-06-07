@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Simple Navigation</string>
+
+    <!--    Action bar-->
+    <string name="store_title">المتجر</string>
+    <string name="help_title">مساعدة</string>
+    <string name="options_title">الاعدادات</string>
+    <string name="product_title">المنتج</string>
+
+    <!-- page body-->
+    <string name="store_welcome">مرحبا بك في متجرنا</string>
+    <string name="help_page">كيف يمكنني المساعدة؟</string>
+    <string name="theme_text_view">اختر ستايلك</string>
+    <string name="language_text_view">اختر لغتك</string>
+    <string name="brand_text_view">الشركة:  </string>
+    <string name="model_text_view">الموديل: </string>
+    <string name="description_text_view">المواصفات: </string>
+    <string name="pictures_text_view">الصور</string>
+
+
+
+    <!--    Buttons-->
+    <string name="store_to_help_button">المساعدة؟</string>
+    <string name="help_to_store_button">الرجوع الى المتجر</string>
+    <string name="options_button">الاعدادات</string>
+    <string name="dark_mode_button">داكن</string>
+    <string name="light_mode_button">فاتح</string>
+    <string name="default_mode_button">افتراضي</string>
+    <string name="change_accent_button">تغيير اللون</string>
+    <string name="save_accent_button">حفظ اللون</string>
+    <string name="arabic_button">العربية</string>
+    <string name="english_button">الانجليزية</string>
+    <string name="details_button">التفاصيل</string>
+
+</resources>

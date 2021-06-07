@@ -17,10 +17,11 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     //    var phones: MutableLiveData<Phones> =  MutableLiveData(Phones(list))
     var phones: MutableLiveData<MutableList<Phone>> = MutableLiveData()
     lateinit var currentPhone: Phone
-    val themeColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+    val themeColor = MutableLiveData<Int>(-1)
 
-    val themeMode: MutableLiveData<Int> = MutableLiveData<Int>(-1)
-    val textColor: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+    val themeMode = MutableLiveData<Int>(-1)
+    val textColor = MutableLiveData<Int>(-1)
+    val lang = MutableLiveData<String>("en_US")
 
 //    is loading from fetching data from MobilyAPI
     val isLoading = MutableLiveData(true)
@@ -30,8 +31,12 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         val defaultColor = application.resources.getColor(R.color.purple_200)
         themeColor.value = sharedPref.getInt("color", defaultColor)
         themeMode.value = sharedPref.getInt("mode", -1)
+        lang.value = sharedPref.getString("lang", "en_US")
+
         Log.d("debugg", "restore theme color:  ${themeColor.value}")
         Log.d("debugg", "restore theme mode:  ${themeMode.value}")
+        Log.d("debugg", "restore language to:  ${lang.value}")
+        Log.d("debugg", "retrieving phones...")
         retrievePhones()
     }
 
@@ -44,6 +49,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             themeMode.value == AppCompatDelegate.MODE_NIGHT_YES && mode == "dark" -> disabledColor
             themeMode.value == AppCompatDelegate.MODE_NIGHT_NO && mode == "light" -> disabledColor
             themeMode.value == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM && mode == "default" -> disabledColor
+            lang.value == mode  -> disabledColor
             else -> themeColor
         }
     }
@@ -92,11 +98,21 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             isLoading.postValue(true)
             phones.postValue(MobilyAPI.fetchPhones())
             isLoading.postValue(false)
+            Log.d("debugg", "retrieved phones successfully")
         }
     }
 
     fun selectPhone(phone: Phone) {
         currentPhone = phone
+    }
+
+    fun changeLanguage(code: String){
+        lang.value = code
+        with(sharedPref.edit()) {
+            putString("lang", code)
+            Log.d("debugg", "Saved language to Prefs: $code")
+            apply()
+        }
     }
 
 

@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
-            android:text="Brand: "
+            android:text="@string/brand_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/productTitle" />
 
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Model: "
+            android:text="@string/model_text_view"
             app:layout_constraintStart_toStartOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Description:"
+            android:text="@string/description_text_view"
             app:layout_constraintStart_toStartOf="@+id/textView8"
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Pictures"
+            android:text="@string/pictures_text_view"
             app:layout_constraintBottom_toTopOf="@+id/productImage"
             app:layout_constraintEnd_toEndOf="@+id/productImage"
             app:layout_constraintStart_toStartOf="@+id/productImage" />
@@ -115,11 +115,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:backgroundTint="@{viewModel.themeColor}"
-            android:text="Details"
+            android:text="@string/details_button"
             android:textColor="@{viewModel.textColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
