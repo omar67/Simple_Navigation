@@ -15,6 +15,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     private val sharedPref = application.getSharedPreferences("theme", MODE_PRIVATE)
 
     //    var phones: MutableLiveData<Phones> =  MutableLiveData(Phones(list))
+    var allPhones: MutableLiveData<MutableList<Phone>> = MutableLiveData()
     var phones: MutableLiveData<MutableList<Phone>> = MutableLiveData()
     lateinit var currentPhone: Phone
     val themeColor = MutableLiveData<Int>(-1)
@@ -22,8 +23,9 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     val themeMode = MutableLiveData<Int>(-1)
     val textColor = MutableLiveData<Int>(-1)
     val lang = MutableLiveData<String>("en_US")
+    val selectedFilter = MutableLiveData<String>("All")
 
-//    is loading from fetching data from MobilyAPI
+    //    is loading from fetching data from MobilyAPI
     val isLoading = MutableLiveData(true)
 
 
@@ -40,7 +42,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         retrievePhones()
     }
 
-//    return a grayed out color if the button is selected
+    //    return a grayed out color if the button is selected
     fun getSelectedThemeBtn(mode: String): LiveData<Int> {
         val disabledColor = Transformations.map(themeColor) {
             ColorUtils.blendARGB(themeColor.value!!, Color.BLACK, 0.4f)
@@ -49,7 +51,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             themeMode.value == AppCompatDelegate.MODE_NIGHT_YES && mode == "dark" -> disabledColor
             themeMode.value == AppCompatDelegate.MODE_NIGHT_NO && mode == "light" -> disabledColor
             themeMode.value == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM && mode == "default" -> disabledColor
-            lang.value == mode  -> disabledColor
+            lang.value == mode -> disabledColor
             else -> themeColor
         }
     }
@@ -96,7 +98,9 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     private fun retrievePhones() {
         viewModelScope.launch(Dispatchers.IO) {
             isLoading.postValue(true)
-            phones.postValue(MobilyAPI.fetchPhones())
+            val fetchedPhones = MobilyAPI.fetchPhones()
+            allPhones.postValue(fetchedPhones)
+            phones.postValue(fetchedPhones)
             isLoading.postValue(false)
             Log.d("debugg", "retrieved phones successfully")
         }
@@ -106,13 +110,25 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         currentPhone = phone
     }
 
-    fun changeLanguage(code: String){
+    fun changeLanguage(code: String) {
         lang.value = code
         with(sharedPref.edit()) {
             putString("lang", code)
             Log.d("debugg", "Saved language to Prefs: $code")
             apply()
         }
+    }
+
+    fun filterPhones(brand: String) {
+        var filtered = allPhones.value
+
+        if (brand != "All") {
+            filtered = filtered!!.filter { phone ->
+                phone.brand.contains(brand, true)
+            } as MutableList<Phone>
+        }
+        selectedFilter.value = brand
+        phones.postValue(filtered)
     }
 
 

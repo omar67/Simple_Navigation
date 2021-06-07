@@ -28,8 +28,7 @@
             app:layout_constraintBottom_toTopOf="@+id/productsRV"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 
         <TextView
@@ -60,15 +59,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
+            android:backgroundTint="@{viewModel.themeColor}"
+            android:onClick="@{() -> storeFragment.navigateToHelp()}"
             android:text="@string/store_to_help_button"
             android:textColor="@{viewModel.textColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:singleSelection="true"
+            app:layout_constraintBottom_toTopOf="@+id/productsRV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            android:backgroundTint="@{viewModel.themeColor}"
-            android:onClick="@{() -> storeFragment.navigateToHelp()}"
-            />
+            android:visibility="visible"
+            >
+
+
+        </com.google.android.material.chip.ChipGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productsRV"
