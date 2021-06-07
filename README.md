@@ -8,3 +8,4 @@ The main focus of this project is to practice on the following:
   - Intents
   - ViewModels
   - RecycleView
+  - Threading/Coroutine
