@@ -49,6 +49,6 @@
     <fragment
         android:id="@+id/productFragment"
         android:name="com.example.simplenavigation.ProductFragment"
-        android:label="Product"
+        android:label="@string/product_title"
         tools:layout="@layout/fragment_product" />
 </navigation>
