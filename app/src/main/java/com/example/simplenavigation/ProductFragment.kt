@@ -3,6 +3,7 @@ package com.example.simplenavigation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,10 +36,14 @@ class ProductFragment : Fragment() {
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-
-        Picasso.with(this.context)
-            .load(viewModel.currentPhone.image)
-            .into(binding.productImage)
+        
+        try {
+            Picasso.with(this.context)
+                .load(viewModel.currentPhone.image)
+                .into(binding.productImage)
+        } catch (e: Exception) {
+            Log.d("debugg", "Couldn't load image ${currentPhone.model} img: ${currentPhone.image}")
+        }
 
         binding.detailsBtn.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(currentPhone.url))

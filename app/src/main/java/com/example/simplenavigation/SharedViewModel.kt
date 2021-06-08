@@ -9,12 +9,12 @@ import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.Exception
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
     private val sharedPref = application.getSharedPreferences("theme", MODE_PRIVATE)
 
-    //    var phones: MutableLiveData<Phones> =  MutableLiveData(Phones(list))
     var allPhones: MutableLiveData<MutableList<Phone>> = MutableLiveData()
     var phones: MutableLiveData<MutableList<Phone>> = MutableLiveData()
     lateinit var currentPhone: Phone
@@ -39,7 +39,9 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         Log.d("debugg", "restore theme mode:  ${themeMode.value}")
         Log.d("debugg", "restore language to:  ${lang.value}")
         Log.d("debugg", "retrieving phones...")
+
         retrievePhones()
+
     }
 
     //    return a grayed out color if the button is selected
@@ -97,12 +99,17 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     //    retrieve the phones from the MobilyAPI
     private fun retrievePhones() {
         viewModelScope.launch(Dispatchers.IO) {
-            isLoading.postValue(true)
-            val fetchedPhones = MobilyAPI.fetchPhones()
-            allPhones.postValue(fetchedPhones)
-            phones.postValue(fetchedPhones)
-            isLoading.postValue(false)
-            Log.d("debugg", "retrieved phones successfully")
+            try {
+                isLoading.postValue(true)
+                val fetchedPhones = MobilyAPI.fetchPhones()
+                allPhones.postValue(fetchedPhones)
+                phones.postValue(fetchedPhones)
+                isLoading.postValue(false)
+                selectedFilter.postValue("All")
+                Log.d("debugg", "retrieved phones successfully")
+            } catch (e:Exception){
+                Log.d("debugg", "couldn't retrieve phones")
+            }
         }
     }
 
