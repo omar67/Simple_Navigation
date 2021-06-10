@@ -8,17 +8,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.simplenavigation.databinding.FragmentStoreBinding
 import com.google.android.material.chip.Chip
+import kotlin.math.abs
 
 //shorten the code, less code than HelpFragment!!!
 class StoreFragment : Fragment() {
@@ -39,22 +40,76 @@ class StoreFragment : Fragment() {
                 false
             )
 
+        bindData()
+        handleOnSwipeRefresh()
+        setupFilterChips()
 
-        binding.viewModel = viewModel
-        binding.storeFragment = this
-        binding.lifecycleOwner = this
 
-        viewModel.allPhones.observe(viewLifecycleOwner, { phones ->
-            if (phones.isNotEmpty()) {
-                val brands = mutableSetOf<String>()
-                phones.map { phone -> if (phone.brand != "null") brands.add(phone.brand) }
+        handleLoadingState()
+        handlePhonesAdapter()
 
-                generateChips(brands)
+
+
+
+
+        return binding.root
+    }
+
+
+    //        display and update the phones when loaded
+    private fun handlePhonesAdapter() {
+        var adapter: RecyclerView.Adapter<PhonesAdapter.ViewHolder>?
+
+        viewModel.phones.observe(viewLifecycleOwner, {
+            if (it != null) {
+                adapter = PhonesAdapter(viewModel.phones.value!!, viewModel)
+                binding.productsRV.adapter = adapter
+                binding.productsRV.apply {
+                    this.adapter = adapter
+                    this.clipToPadding = false
+                    this.clipChildren = false
+                    this.offscreenPageLimit = 3
+                }
+                binding.productsRV.setPageTransformer(getCompositeTransformer())
+                Log.d("debugg", "Phones is loaded to view holder")
+            }
+            Log.d("debugg", "Phones is not loaded to view holder")
+        })
+    }
+
+//    return a CompositePageTransformer that animate the entrance of phones
+    private fun getCompositeTransformer(): CompositePageTransformer {
+        val compositeTrans = CompositePageTransformer()
+        compositeTrans.apply {
+            this.addTransformer(MarginPageTransformer(20))
+            this.addTransformer { page, position ->
+                val r = 1 - abs(position)
+                page.scaleY = (0.85f + r * 0.15f)
+            }
+        }
+        return compositeTrans
+    }
+
+    //        display and update the loading progress bar + swipe refresh bar  on Store Fragment if needed
+    private fun handleLoadingState() {
+        viewModel.isLoading.observe(viewLifecycleOwner, {
+            if (it)
+                binding.progressBar.visibility = View.VISIBLE
+            else {
+                binding.progressBar.visibility = View.GONE
+                binding.swipeRefreshLayout.isRefreshing = false
             }
         })
 
-        viewModel.selectedFilter.observe(viewLifecycleOwner, { filter ->
+    }
 
+    private fun setupFilterChips() {
+        handleGeneratingFilterChips()
+        handleFilterChipsCurrentState()
+    }
+
+    private fun handleFilterChipsCurrentState() {
+        viewModel.selectedFilter.observe(viewLifecycleOwner, { filter ->
             binding.chipGroup.children.forEach { chipView ->
                 val temp = chipView as Chip
                 if (temp.tag == filter)
@@ -63,39 +118,34 @@ class StoreFragment : Fragment() {
                     temp.chipBackgroundColor = getColorState(false)
             }
         })
+    }
 
-
-        val layoutManager: RecyclerView.LayoutManager?
-        var adapter: RecyclerView.Adapter<PhonesAdapter.ViewHolder>?
-
-        layoutManager = LinearLayoutManager(this.context, LinearLayout.HORIZONTAL, false)
-        binding.productsRV.layoutManager = layoutManager
-
-//        display and update the loading progress bar on Store Fragment if needed
-        viewModel.isLoading.observe(viewLifecycleOwner, {
-            if (it)
-                binding.progressBar.visibility = View.VISIBLE
-            else
-                binding.progressBar.visibility = View.GONE
-        })
-
-//        display and update the phones when loaded
-        viewModel.phones.observe(viewLifecycleOwner, {
-            if (it != null) {
-                adapter = PhonesAdapter(viewModel.phones.value!!, viewModel)
-                binding.productsRV.adapter = adapter
-                Log.d("debugg", "loaded to recycler view")
+    private fun handleGeneratingFilterChips() {
+        viewModel.allPhones.observe(viewLifecycleOwner, { phones ->
+            if (phones.isNotEmpty()) {
+                val brands = mutableSetOf<String>()
+                phones.map { phone -> if (phone.brand != "null") brands.add(phone.brand) }
+                generateChips(brands)
             }
-            Log.d("debugg", "not loaded to recycler view")
         })
+    }
 
-        return binding.root
+    private fun handleOnSwipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            Log.d("debugg", "refreshing phones ")
+            viewModel.refreshPhones()
+        }
+    }
+
+    private fun bindData() {
+        binding.viewModel = viewModel
+        binding.storeFragment = this
+        binding.lifecycleOwner = this
     }
 
     //    generate chips and display it in UI
     private fun generateChips(brands: MutableSet<String>) {
         binding.chipGroup.removeAllViews()
-
 
         val chip = Chip(this.context)
         chip.text = "All"
@@ -118,9 +168,11 @@ class StoreFragment : Fragment() {
 
     }
 
+
     private fun filterPhones(chip: Chip) {
         viewModel.filterPhones(chip.text.toString())
     }
+
 
     private fun getColorState(selected: Boolean): ColorStateList {
         val states = arrayOf(

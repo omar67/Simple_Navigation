@@ -29,21 +29,26 @@ class OptionsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_options, container, false)
+        bindData()
 
+        handleColorChangeListener()
+
+        updateButtonState()
+        return binding.root
+    }
+
+    private fun bindData() {
         binding.optionsFragment = this
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+    }
 
-        // color wheel listener, listens for any change in the color
+    // color wheel listener, listens for any change in the color
+    private fun handleColorChangeListener() {
         binding.colorPickerView.setColorListener(ColorListener { color, _ ->
             if (color != -1 && color != viewModel.themeColor.value)
                 viewModel.saveThemeColor(color)
         })
-
-
-//        update the fragment view for preferred theme
-        updateButtonState()
-        return binding.root
     }
 
     //    this method will change the state of changeAccent button

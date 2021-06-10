@@ -1,12 +1,14 @@
 package com.example.simplenavigation
 
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -23,10 +25,10 @@ class PhonesAdapter(
             .inflate(R.layout.layout_list_products, parent, false)
 
         context = parent.context
-
         return ViewHolder(v)
     }
-//      bind data on the recycler view (only one card)
+
+    //      bind data on the recycler view (only one card)
     override fun onBindViewHolder(holder: PhonesAdapter.ViewHolder, position: Int) {
 
         if (dataSet[position].image.isEmpty())

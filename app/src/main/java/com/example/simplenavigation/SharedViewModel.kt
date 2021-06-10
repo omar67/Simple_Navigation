@@ -9,7 +9,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.Exception
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -38,9 +37,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         Log.d("debugg", "restore theme color:  ${themeColor.value}")
         Log.d("debugg", "restore theme mode:  ${themeMode.value}")
         Log.d("debugg", "restore language to:  ${lang.value}")
-        Log.d("debugg", "retrieving phones...")
-
-        retrievePhones()
 
     }
 
@@ -107,7 +103,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
                 isLoading.postValue(false)
                 selectedFilter.postValue("All")
                 Log.d("debugg", "retrieved phones successfully")
-            } catch (e:Exception){
+            } catch (e: Exception) {
                 Log.d("debugg", "couldn't retrieve phones")
             }
         }
@@ -118,12 +114,9 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun changeLanguage(code: String) {
+        LocaleHelper.setLocale(getApplication(), code)
         lang.value = code
-        with(sharedPref.edit()) {
-            putString("lang", code)
-            Log.d("debugg", "Saved language to Prefs: $code")
-            apply()
-        }
+        Log.d("debugg", "Saved language to Prefs: $code")
     }
 
     fun filterPhones(brand: String) {
@@ -136,6 +129,11 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
         selectedFilter.value = brand
         phones.postValue(filtered)
+    }
+
+    fun refreshPhones() {
+        retrievePhones()
+        Log.d("debugg", "Phones are refreshing..!")
     }
 
 
