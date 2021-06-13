@@ -18,7 +18,7 @@ object MobilyAPI {
 
         "https://shop.mobily.com.sa/product-category/smartphones-ar/page/2/"
         for (i in 1..5) {
-            var url = if(langCode=="en") "https://shop.mobily.com.sa/product-category/smartphones/$langCode" else "https://shop.mobily.com.sa/product-category/smartphones-ar/"
+            var url = if(langCode=="en") "https://shop.mobily.com.sa/product-category/smartphones/?lang=en" else "https://shop.mobily.com.sa/product-category/smartphones-ar/"
             if (i > 1)
                 url = if(langCode=="en") "https://shop.mobily.com.sa/product-category/smartphones/page/$i/?lang=en" else "https://shop.mobily.com.sa/product-category/smartphones-ar/page/$i/"
 
