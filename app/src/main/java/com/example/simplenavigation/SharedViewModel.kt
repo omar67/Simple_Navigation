@@ -97,7 +97,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 isLoading.postValue(true)
-                val fetchedPhones = MobilyAPI.fetchPhones()
+                val fetchedPhones = MobilyAPI.fetchPhones(lang.value!!)
                 allPhones.postValue(fetchedPhones)
                 phones.postValue(fetchedPhones)
                 isLoading.postValue(false)

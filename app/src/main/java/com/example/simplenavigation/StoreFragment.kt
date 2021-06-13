@@ -44,13 +44,8 @@ class StoreFragment : Fragment() {
         handleOnSwipeRefresh()
         setupFilterChips()
 
-
         handleLoadingState()
         handlePhonesAdapter()
-
-
-
-
 
         return binding.root
     }
@@ -77,7 +72,7 @@ class StoreFragment : Fragment() {
         })
     }
 
-//    return a CompositePageTransformer that animate the entrance of phones
+    //    return a CompositePageTransformer that animate the entrance of phones
     private fun getCompositeTransformer(): CompositePageTransformer {
         val compositeTrans = CompositePageTransformer()
         compositeTrans.apply {
@@ -93,14 +88,7 @@ class StoreFragment : Fragment() {
     //        display and update the loading progress bar + swipe refresh bar  on Store Fragment if needed
     private fun handleLoadingState() {
         viewModel.isLoading.observe(viewLifecycleOwner, {
-            if (it)
-                binding.swipeRefreshLayout.isRefreshing = true
-
-//                binding.progressBar.visibility = View.VISIBLE
-            else {
-//                binding.progressBar.visibility = View.GONE
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
+            binding.swipeRefreshLayout.isRefreshing = it
         })
 
     }
