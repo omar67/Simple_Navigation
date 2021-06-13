@@ -94,9 +94,11 @@ class StoreFragment : Fragment() {
     private fun handleLoadingState() {
         viewModel.isLoading.observe(viewLifecycleOwner, {
             if (it)
-                binding.progressBar.visibility = View.VISIBLE
+                binding.swipeRefreshLayout.isRefreshing = true
+
+//                binding.progressBar.visibility = View.VISIBLE
             else {
-                binding.progressBar.visibility = View.GONE
+//                binding.progressBar.visibility = View.GONE
                 binding.swipeRefreshLayout.isRefreshing = false
             }
         })
